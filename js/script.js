@@ -141,7 +141,6 @@ var Sudoku = (function($, _, document, window, undefined){
       var cell_candidates = candidates[i-1][j-1];
       var html_candidates = "<div class=\"notes\">";
       for (var h = 1; h <= 3; h++) {
-        // html_candidates += "<tr>";
         for (var k = 1; k <= 3; k++) {
           var value = (h-1)*3 + k;
           html_candidates += "<div>";
@@ -152,7 +151,6 @@ var Sudoku = (function($, _, document, window, undefined){
           }
           html_candidates += "</div>";
         } 
-        // html_candidates += "</tr>";
       }
       html_candidates += "</div>";
       $cell.html(html_candidates);
@@ -242,7 +240,7 @@ var Sudoku = (function($, _, document, window, undefined){
       return "impossible";
     // unique candidate: is the solution        
     } else if (candidates[i-1][j-1].length == 1) {
-      console.info("Found unique solution at cell %s,%s", i, j);
+      console.info("Found unique solution at cell %s,%s: %s", i, j, candidates[i-1][j-1][0]);
       fill_in(i, j, candidates[i-1][j-1][0]);
       return "solved";
     // multiple candidates: being worked out              
@@ -502,17 +500,15 @@ var Sudoku = (function($, _, document, window, undefined){
   var reset = function(){
     // stop processing
     clearTimeout(current_timer);
-
     // reset counters
     iteration_step = 0;
     iterations = 1;
-
+    // reset candidates
     for (var i =0; i < 9; i++) {
       for (var j =0; j < 9; j++) {
         candidates[i][j] = [];
       }
     }
-
     // clean interface
     $("#sudoku div.content").removeClass("highlight");
     $("#sudoku div.empty").html("");
@@ -523,10 +519,32 @@ var Sudoku = (function($, _, document, window, undefined){
 
     $("#solve").removeAttr("disabled");
 
-    display_status("","");
-
+    display_status("");
   };
 
+  // build the grid
+  var build_grid = function(){
+    var html, klass;
+    for (var i = 1; i < 10; i++) {
+      html = "<tr>";
+      for (var j = 1; j < 10; j++) {
+        klass = "";
+        if (i == 3 || i == 6) { 
+          klass = "bb " + klass;
+        }
+        if (j == 3 || j == 6) {
+          klass = "br " + klass;
+        }
+        html += "<td class=\"" + klass + "\">";
+        html += "<div class=\"empty content\" id=\"cell_"+i+"_"+j+"\"";
+        html += " data-row=\"" + i + "\" data-col=\""+j+"\" contenteditable=\"true\"></div></td>";
+      }
+      html += "</tr>";
+      $(html).appendTo("#sudoku");
+    }
+  };
+
+  // adjust speed on changing the range control
   var set_speed = function(speed) {
     $("#speed").html(speed + "%");
     if (speed == 100) {
@@ -537,6 +555,8 @@ var Sudoku = (function($, _, document, window, undefined){
   };
 
   var init = function() {
+
+    build_grid();
 
     $("#sudoku div.content").fitText(0.18);
 

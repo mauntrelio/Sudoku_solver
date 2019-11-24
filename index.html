@@ -11,24 +11,7 @@
 
   <h1>Sudoku solver</h1>
   
-  <table id="sudoku">
-    <?php for ($i = 1; $i < 10; $i++): ?>
-    <tr>
-      <?php for ($j = 1; $j < 10; $j++): ?>
-        <?php 
-        $class = "";
-        if ($i == 3 || $i == 6) {
-          $class = "bb $class";
-        }
-        if ($j == 3 || $j == 6) {
-          $class = "br $class";
-        }
-        ?>
-        <td class="<?=$class?>"><div class="empty content" id="cell_<?=$i?>_<?=$j?>" data-row="<?=$i?>" data-col="<?=$j?>" contenteditable="true"></div></td>
-      <?php endfor; ?> 
-    </tr>
-    <?php endfor; ?> 
-  </table>
+  <table id="sudoku"></table>
   
   <div id="bottom">
     
