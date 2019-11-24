@@ -52,7 +52,6 @@ table#sudoku td {
   padding: 0px; 
 }
 
-
 table#sudoku td:after {
   content: '';
   display: block;
@@ -128,7 +127,18 @@ button#solve {
   color: white;
 }
 
+button#get {
+  background-color: dodgerblue;
+  color: white;
+}
+
 button#reset {
+  background-color: chocolate;
+  color: white;
+}
+
+button#empty {
   background-color: red;
   color: white;
 }
+

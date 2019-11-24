@@ -496,6 +496,38 @@ var Sudoku = (function($, _, document, window, undefined){
         
   };
 
+  // start completely fresh 
+  var empty = function(){
+    // reset first
+    reset();
+    $("#sudoku div.content").html("").addClass("empty");
+  };
+
+  // get a sudoku from sudoku.com apis
+  var get_one = function(){
+    // empty first
+    empty();
+    display_status("Getting a puzzle from sudoku.com...");
+    console.log("Getting a puzzle from sudoku.com...");
+    fetch("sudoku.php").then(function(response){
+      if(response.ok) {
+        return response.json();
+      }
+    }).then(function(data){
+      var puzzle = data.desc[0].split("");
+      puzzle.forEach(function(value, index){
+        if (parseInt(value) > 0) {
+          var i = Math.ceil((index+1)/9);
+          var j = (index+1) % 9;
+          if (j == 0) { j = 9; }
+          $("#cell_" + i + "_" + j).html(value).removeClass("empty");
+        }
+      display_status("");
+      }); 
+    });
+
+  };
+
   // reset button
   var reset = function(){
     // stop processing
@@ -575,6 +607,8 @@ var Sudoku = (function($, _, document, window, undefined){
     });
 
     $("#reset").on("click", reset);
+    $("#get").on("click", get_one);
+    $("#empty").on("click", empty);
 
   };
 
